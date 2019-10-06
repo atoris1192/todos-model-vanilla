@@ -7,6 +7,12 @@ html(lang="en")
     title Document
     link(rel="stylesheet", href="style.stylus")
   body
-    div hello
-    #app
+    .todoapp
+      form#js-form
+        input#js-form-input.new-todo(type="text" placeholder="What neet to be done ?" autocomplete="off")
+      
+      #js-todo-list.todo-list
+
+      footer.footer
+        span#js-todo-count TodoItems: 0
     script(src="./index.ts")
