@@ -5,3 +5,4 @@ app.mount();
 app.elementSample();
 app.eventEmitterSample()
 app.todoItemModelSample();
+app.todoListModelSample();

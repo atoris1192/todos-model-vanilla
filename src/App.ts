@@ -1,6 +1,7 @@
 import { element, render } from './view/html-util';
 import { EventEmitter } from './EventEmitter';
 import { TodoItemModel } from './model/TodoItemModel'
+import { TodoListModel } from './model/TodoListModel';
 
 
 export class App {
@@ -56,6 +57,26 @@ export class App {
     })
     console.log(item1.id !== item2.id);
     console.log(item1, item2);
+    
+  }
+  todoListModelSample() {
+    const todoListModel = new TodoListModel();
+    console.log(todoListModel.getTotalCounter());
+
+
+    todoListModel.onChange(() => {
+      console.log("changeListenerが呼び出されました1");
+    })
+    todoListModel.addEventListener('change', () => {
+      console.log("ChangeListenerが呼び出されました2");
+    })
+
+    // addTodoには、emitter が入っている
+    todoListModel.addTodo( new TodoItemModel({
+      title: "new item1",
+      completed: false,
+    }))
+    console.log(todoListModel.getTotalCounter());
     
   }
 }
