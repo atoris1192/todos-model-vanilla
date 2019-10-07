@@ -1,12 +1,14 @@
 import { EventEmitter } from '../EventEmitter';
 
+const sample = [
+  { id: 100, title: "Item100", completed: false },
+  { id: 101, title: "Item101", completed: true },
+  { id: 102, title: "Item102", completed: false },
+]
+
 export class TodoListModel extends EventEmitter {
-  private items: {
-    id: number,
-    title: string,
-    completd: boolean,
-  }[]
-  constructor(items = []) {
+  private items: any;
+  constructor(items = sample) {
     super()
     this.items = items;
   }
