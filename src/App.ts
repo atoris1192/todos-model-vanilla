@@ -44,7 +44,6 @@ export class App {
     const jsForm = document.querySelector('#js-form');
     const jsFormInput = document.querySelector('#js-form-input');
 
-    // const todoListModel = new TodoListModel()
     this.todoListModel.setTodoItems(sample)
     const items = this.todoListModel.getTodoItems();
     const totalCount = this.todoListModel.getTotalCount();
