@@ -34,22 +34,35 @@ class TodoListModel {
 }
 
 export class App {
+  private todoListModel: any;
   constructor() {
+    this.todoListModel = new TodoListModel()
   }
   main() {
     const todoList = document.querySelector('#js-todo-list');
     const todoCount = document.querySelector('#js-todo-count');
+    const jsForm = document.querySelector('#js-form');
+    const jsFormInput = document.querySelector('#js-form-input');
 
-    const todoListModel = new TodoListModel()
-    todoListModel.setTodoItems(sample)
-    const items = todoListModel.getTodoItems();
-    const totalCount = todoListModel.getTotalCount();
+    // const todoListModel = new TodoListModel()
+    this.todoListModel.setTodoItems(sample)
+    const items = this.todoListModel.getTodoItems();
+    const totalCount = this.todoListModel.getTotalCount();
 
     items.forEach( item => {
       const listElement = element`<li>${ item.title }</li>`
       todoList.appendChild(listElement)
 
     });
+
+    jsForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      console.log("submit....");
+
+      this.todoLihh
+      
+
+    })
 
     
     todoCount.textContent = `Todo Count: ${ totalCount }`
