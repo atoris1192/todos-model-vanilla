@@ -1,72 +1,54 @@
-import { element, render } from './view/html-util';
-// import { EventEmitter } from './EventEmitter';
-import { TodoItemModel } from './model/TodoItemModel'
-import { TodoListModel } from './model/TodoListModel';
-import { TodoItemView } from './view/TodoItemView';
-import { TodoListView } from './view/TodolistView';
+import { element } from './view/html-util';
+const sample = [
+  { id: 100, title: "title1", completed: false},
+  { id: 101, title: "title2", completed: true},
+  { id: 102, title: "title3", completed: false},
+]
+let id = 0;
 
-const sample = {
-  id : 0,
-  title: "task 0",
-  completed: false,
+class TodoItemModel {
+  private id: number;
+  private title: string;
+  private completed: boolean;
+
+  constructor({ title, completed }) {
+    this.id = id +=1;
+    this.title = title;
+    this.completed = completed
+  }
+}
+class TodoListModel {
+  private items: any;
+  constructor(items = sample) {
+    this.items = items;
+  }
+  getTodoItems() {
+    return this.items;
+  }
+  getTotalCount() {
+    return this.items.length;
+  }
 }
 
 export class App {
-  private todoListModel: any;
   constructor() {
-    this.todoListModel = new TodoListModel() // instance 
   }
-  mount() {
-    const formElement = document.querySelector('#js-form');
-    const inputElement: any = document.querySelector('#js-form-input');
-    const containerElement = document.querySelector('#js-todo-list');
-    const todoItemCountElement = document.querySelector('#js-todo-count');
-    const btn = document.querySelector('#btn');
+  main() {
+    const todoList = document.querySelector('#js-todo-list');
+    const todoCount = document.querySelector('#js-todo-count');
 
-    btn.addEventListener('click', () => {
-      console.log("btn click");
-      
-      const todos = JSON.parse(localStorage.getItem('todos')) || []
-      this.todoListModel.setTodoItems(todos)
-      this.todoListModel.emitChange()
-    })
+    const todoListModel = new TodoListModel()
+    const items = todoListModel.getTodoItems();
+    const totalCount = todoListModel.getTotalCount();
 
-    this.todoListModel.addEventListener("change", () => {
-      const todoItems = this.todoListModel.getTodoItems();
-      const todoListView = new TodoListView();
-      const todoListElement = todoListView.createElement(todoItems, {
-        onUpdateTodo: ({ id, completed }) => {
-          this.todoListModel.updateTodo({ id, completed });
-        },
-        onDeleteTodo: ({ id }) => {
-          this.todoListModel.deleteTodo({ id })
-        }
-      })
+    items.forEach( item => {
+      const listElement = element`<li>${ item.title }</li>`
+      todoList.appendChild(listElement)
 
-      render(todoListElement, containerElement);
+    });
 
-      todoItemCountElement.textContent = `TodoItems: ${this.todoListModel.getTotalCounter()}`
-    })
+    
+    todoCount.textContent = `Todo Count: ${ totalCount }`
 
-
-    formElement.addEventListener('submit', event => {
-      event.preventDefault();
-
-      this.todoListModel.addTodo(new TodoItemModel({
-        title: inputElement.value,
-        completed: false,
-      }));
-      inputElement.value = '';
-    })
-
-
-    this.todoListModel.emitChange() // initial
-  
-
-    window.addEventListener('unload', () => {
-      console.log("UNLOAD");
-      
-      localStorage.setItem("todos", JSON.stringify(this.todoListModel.getTodoItems()))
-    })
   }
 }
