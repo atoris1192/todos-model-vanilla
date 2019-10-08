@@ -19,11 +19,14 @@ class TodoItemModel {
 }
 class TodoListModel {
   private items: any;
-  constructor(items = sample) {
+  constructor(items = []) {
     this.items = items;
   }
   getTodoItems() {
     return this.items;
+  }
+  setTodoItems(items) {
+    this.items = items
   }
   getTotalCount() {
     return this.items.length;
@@ -38,6 +41,7 @@ export class App {
     const todoCount = document.querySelector('#js-todo-count');
 
     const todoListModel = new TodoListModel()
+    todoListModel.setTodoItems(sample)
     const items = todoListModel.getTodoItems();
     const totalCount = todoListModel.getTotalCount();
 
