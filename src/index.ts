@@ -1,8 +1,8 @@
 import { App } from './App';
 
 const app = new App();
-app.mount();
-// app.elementSample();
-// app.eventEmitterSample()
-// app.todoItemModelSample();
-// app.todoListModelSample();
+window.addEventListener("load", () => {
+  app.mount();
+})
+window.addEventListener("unload", () => {
+})

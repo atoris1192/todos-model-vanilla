@@ -1,5 +1,7 @@
 import { EventEmitter } from '../EventEmitter';
 
+//  const todos = JSON.parse(localStorage.getItem('todos')) || []
+    
 const sample = [
   { id: 100, title: "Item100", completed: false },
   { id: 101, title: "Item101", completed: true },
@@ -17,6 +19,9 @@ export class TodoListModel extends EventEmitter {
   }
   getTodoItems() {
     return this.items;
+  }
+  setTodoItems(items: any[]) {
+    this.items = items
   }
   //Change の lisner関数の登録
   // onChange(() => { ... })
