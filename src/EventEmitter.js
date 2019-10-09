@@ -3,7 +3,7 @@ export class EventEmitter {
     this._listeners = new Map();
   }
   // type: event, listener: function
-  // type: functions 一つとは限ららない
+  // type: functions 一つとは限らない
   addEventListener(type, listener) {
     if (!this._listeners.has(type)) {
       this._listeners.set(type, new Set());

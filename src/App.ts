@@ -1,24 +1,7 @@
 import { element } from './view/html-util';
 import { EventEmitter } from './EventEmitter'
+import { sample, TodoItemModel } from './model/TodoItemModel';
 
-const sample = [
-  { id: 100, title: "title1", completed: false},
-  { id: 101, title: "title2", completed: true},
-  { id: 102, title: "title3", completed: false},
-]
-let id = 0;
-
-class TodoItemModel {
-  private id: number;
-  private title: string;
-  private completed: boolean;
-
-  constructor({ title, completed }) {
-    this.id = id +=1;
-    this.title = title;
-    this.completed = completed
-  }
-}
 class TodoListModel extends EventEmitter {
   private items: any;
   constructor(items = []) {
@@ -36,7 +19,13 @@ class TodoListModel extends EventEmitter {
   }
   addTodo(item){
     this.items.push(item);
-    console.log(this.items);
+  }
+  checkboxTodo({ id, completed }) {
+    const item = this.items.find( item => {
+      return item.id === id
+    })
+    item.completed = !item.completed
+    // this.emit('update');
   }
 }
 
@@ -51,7 +40,6 @@ export class App {
     const jsForm = document.querySelector('#js-form');
     const jsFormInput: any = document.querySelector('#js-form-input');
 
-
     this.todoListModel.addEventListener('update', () => {
       this.todoListModel.setTodoItems(sample)
       const items = this.todoListModel.getTodoItems();
@@ -59,8 +47,19 @@ export class App {
       const ul = document.createElement('ul');
 
       items.forEach( item => {
-        const listElement = element`<li>${ item.title }</li>`
+        const listElement = item.completed
+                  ? element`<li><input type="checkbox" class="checkbox" checked /><del>${ item.title }</del><button class="delete" >x</button></li>`
+                  : element`<li><input type="checkbox" class="checkbox" />${ item.title }<button class="delete" >x</button></li>`
         ul.appendChild(listElement)
+        // CheckBox
+        const checkboxElement = listElement.querySelector('.checkbox');
+        checkboxElement.addEventListener('change', () => {
+          this.todoListModel.checkboxTodo({
+            id: item.id,
+            completed: !item.completed,
+          })
+          this.todoListModel.emit('update');
+        })
       });
       todoList.textContent = '';
       todoList.appendChild(ul);
@@ -77,10 +76,10 @@ export class App {
         title: jsFormInput.value,
         completed: false,
       }))      
+      jsFormInput.value = '';
       this.todoListModel.emit('update')
     })
 
-    
 
   }
 }
