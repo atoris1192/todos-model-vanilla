@@ -27,6 +27,12 @@ class TodoListModel extends EventEmitter {
     item.completed = !item.completed
     // this.emit('update');
   }
+  deleteTodo({ id }) {
+    const items = this.items.filter( item => {
+      return item.id !== id
+    })
+    this.items = items
+  }
 }
 
 export class App {
@@ -39,9 +45,9 @@ export class App {
     const todoCount = document.querySelector('#js-todo-count');
     const jsForm = document.querySelector('#js-form');
     const jsFormInput: any = document.querySelector('#js-form-input');
+    this.todoListModel.setTodoItems(sample)
 
     this.todoListModel.addEventListener('update', () => {
-      this.todoListModel.setTodoItems(sample)
       const items = this.todoListModel.getTodoItems();
       const totalCount = this.todoListModel.getTotalCount();
       const ul = document.createElement('ul');
@@ -51,13 +57,21 @@ export class App {
                   ? element`<li><input type="checkbox" class="checkbox" checked /><del>${ item.title }</del><button class="delete" >x</button></li>`
                   : element`<li><input type="checkbox" class="checkbox" />${ item.title }<button class="delete" >x</button></li>`
         ul.appendChild(listElement)
-        // CheckBox
+        // CheckBoxTodo
         const checkboxElement = listElement.querySelector('.checkbox');
         checkboxElement.addEventListener('change', () => {
           this.todoListModel.checkboxTodo({
             id: item.id,
             completed: !item.completed,
           })
+          this.todoListModel.emit('update');
+        })
+        // deleteTodo
+        const deleteElement = listElement.querySelector('.delete');
+        deleteElement.addEventListener('click', () => {
+          this.todoListModel.deleteTodo({
+            id: item.id,
+           }) 
           this.todoListModel.emit('update');
         })
       });
