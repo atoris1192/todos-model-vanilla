@@ -45,7 +45,8 @@ export class App {
     const todoCount = document.querySelector('#js-todo-count');
     const jsForm = document.querySelector('#js-form');
     const jsFormInput: any = document.querySelector('#js-form-input');
-    this.todoListModel.setTodoItems(sample)
+    const todos = JSON.parse(localStorage.getItem('todos'));
+    this.todoListModel.setTodoItems(todos)
 
     this.todoListModel.addEventListener('update', () => {
       const items = this.todoListModel.getTodoItems();
@@ -94,6 +95,9 @@ export class App {
       this.todoListModel.emit('update')
     })
 
-
+    window.addEventListener('beforeunload', () => {
+      const todos = this.todoListModel.getTodoItems()
+      localStorage.setItem('todos', JSON.stringify(todos))
+    })
   }
 }
